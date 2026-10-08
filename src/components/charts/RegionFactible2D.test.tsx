@@ -7,6 +7,22 @@ import { RegionFactible2D } from './RegionFactible2D'
 const ejemplo = (id: string) => parseProblem(EJEMPLOS.find((e) => e.id === id)!.input)
 
 describe('RegionFactible2D', () => {
+  it('las etiquetas de las rectas quedan dentro del viewBox (R2 pegada al borde derecho)', () => {
+    const r = runAll(ejemplo('produccion-2v'))
+    render(<RegionFactible2D problem={r.problem!} snapshots={r.snapshots} k={0} />)
+    const svg = screen.getByRole('img')
+    const [, , ancho] = svg.getAttribute('viewBox')!.split(' ').map(Number)
+    const etiquetas = screen.getAllByTestId('etiqueta-recta')
+    expect(etiquetas).toHaveLength(3)
+    for (const t of etiquetas) {
+      const x = Number(t.getAttribute('x'))
+      expect(Number(t.getAttribute('y'))).toBeGreaterThanOrEqual(12)
+      if (t.getAttribute('text-anchor') === 'end') expect(x).toBeLessThanOrEqual(ancho! - 4)
+      else expect(x + 30).toBeLessThanOrEqual(ancho!)
+    }
+    expect(etiquetas.some((t) => t.getAttribute('text-anchor') === 'end')).toBe(true)
+  })
+
   it('dibuja región, restricciones, vértices, trayectoria, recta de nivel y gradiente', () => {
     const p = ejemplo('produccion-2v')
     const { snapshots } = runAll(p)

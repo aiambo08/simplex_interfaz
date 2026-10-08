@@ -273,8 +273,14 @@ export function RegionFactible2D({ problem, snapshots, k }: Props) {
                   strokeWidth={2}
                 />
                 <text
-                  x={sx(fin[0]) + 4}
-                  y={sy(fin[1]) - 4}
+                  data-testid="etiqueta-recta"
+                  x={
+                    sx(fin[0]) + 4 > W - M.der - 30
+                      ? Math.min(sx(fin[0]) - 4, W - 4)
+                      : sx(fin[0]) + 4
+                  }
+                  y={Math.max(sy(fin[1]) - 4, M.sup + 10)}
+                  textAnchor={sx(fin[0]) + 4 > W - M.der - 30 ? 'end' : 'start'}
                   fontSize={12}
                   fontWeight={600}
                   fill={colorRecta(r)}

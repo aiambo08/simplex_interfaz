@@ -22,5 +22,8 @@ export default defineConfig([
       ecmaVersion: 2022,
       globals: globals.browser,
     },
+    rules: {
+      '@typescript-eslint/no-non-null-assertion': 'off',
+    },
   },
 ])

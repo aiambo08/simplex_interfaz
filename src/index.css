@@ -9,3 +9,38 @@
 body {
   @apply bg-white text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100;
 }
+
+@keyframes destello {
+  from {
+    box-shadow: inset 0 0 0 2px theme(--color-sky-500);
+  }
+  to {
+    box-shadow: inset 0 0 0 0 transparent;
+  }
+}
+
+@keyframes aparecer {
+  from {
+    opacity: 0.4;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.celda-cambiada {
+  animation: destello 1.2s ease-out;
+}
+
+.tabla-entrada {
+  animation: aparecer 0.35s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .celda-cambiada,
+  .tabla-entrada {
+    animation: none;
+  }
+}

@@ -6,7 +6,8 @@ de Programación Lineal, pensada como herramienta de estudio para Investigación
 con explicaciones en lenguaje natural y gráficos de la región factible y de la evolución del
 algoritmo.
 
-> Estado: **F0 — esqueleto del proyecto**. Las funcionalidades se añaden por fases (ver abajo).
+> Estado: **fase (b) — tabla Símplex con stepper, explicaciones, panel matricial y modos de entrada**.
+> Las funcionalidades se añaden por fases (ver abajo).
 
 ## Stack
 
@@ -25,16 +26,44 @@ npm run check   # lint + tipos + tests + build (lo mismo que ejecuta la CI)
 
 Scripts disponibles:
 
-| Script                  | Qué hace                                  |
-| ----------------------- | ----------------------------------------- |
-| `npm run dev`           | Servidor de desarrollo con recarga        |
-| `npm run build`         | Comprueba tipos y genera `dist/`          |
-| `npm run preview`       | Sirve `dist/` localmente                  |
-| `npm run lint`          | ESLint (reglas estrictas de TypeScript)   |
-| `npm run format`        | Formatea con Prettier                     |
-| `npm run typecheck`     | `tsc -b`                                  |
-| `npm run test`          | Vitest (una pasada)                       |
-| `npm run test:coverage` | Vitest con cobertura del módulo `solver/` |
+| Script                  | Qué hace                                |
+| ----------------------- | --------------------------------------- |
+| `npm run dev`           | Servidor de desarrollo con recarga      |
+| `npm run build`         | Comprueba tipos y genera `dist/`        |
+| `npm run preview`       | Sirve `dist/` localmente                |
+| `npm run lint`          | ESLint (reglas estrictas de TypeScript) |
+| `npm run format`        | Formatea con Prettier                   |
+| `npm run typecheck`     | `tsc -b`                                |
+| `npm run test`          | Vitest (una pasada)                     |
+| `npm run test:coverage` | Vitest con cobertura                    |
+
+## Cómo se usa
+
+1. **Introduce el problema** en la pestaña que prefieras:
+   - **Ejemplos**: pulsa uno de los problemas precargados (2 variables, 3 variables, minimización
+     con `≥` resuelta con Símplex Dual, degeneración, óptimos alternativos, no acotado, infactible).
+   - **Formulario guiado**: elige Maximizar/Minimizar, nº de variables (1–6), coeficientes de z y
+     restricciones con `≤`/`≥`. Se aceptan enteros, decimales (`2.5` o `2,5`) y fracciones (`7/3`).
+     Las igualdades se rechazan con aviso (Gran M / dos fases quedan fuera del temario).
+   - **Matriz directa**: pega o sube la tabla Símplex (CSV, JSON o texto separado por espacios) con
+     el renglón z en la primera fila y `b` en la última columna; la cabecera con nombres es opcional.
+     Se detectan las columnas de la identidad y se avisa si la matriz no es válida.
+2. Se muestran el **problema original** y su **forma estándar** (con las notas de cómo se ha
+   obtenido: holguras, superávit, cambio de signo en `min`, filas `≥` multiplicadas por −1).
+3. Recorre las iteraciones con el **stepper**: `⏮ Reiniciar`, `← Anterior`, `Siguiente →`, `▶ Play`
+   (una iteración cada 1,5 s), `Ir a paso k`, barra de progreso y teclado (`←`, `→`, `Inicio`).
+4. En cada iteración:
+   - **Tabla Símplex** con renglón z, columna pivote (`↓ entra`), fila pivote (`→ sale`), elemento
+     pivote, cocientes `b_i / a_ie` con el mínimo marcado (`← mín`) y filas con `a_ie ≤ 0` tachadas.
+     En el Símplex Dual los cocientes `|z_j / a_rj|` aparecen bajo cada columna.
+   - Panel **«¿Qué ha pasado y por qué?»**: variable que entra y por qué, variable que sale y por qué,
+     cocientes, empates y regla de Bland, cambio de convención max/min, factibilidad, óptimo, no
+     acotación o infactibilidad.
+   - **Operaciones aplicadas**: `F_p ← F_p / pivote` y `F_i ← F_i − a·F_p` con los factores exactos.
+   - **Formulación matricial**: `B⁻¹`, `c_Bᵀ B⁻¹`, `x_B = B⁻¹ b`, valor de z y comprobación de que
+     coinciden con las columnas de la base en la tabla.
+5. Arriba a la derecha puedes alternar **fracción exacta / decimal** y **modo claro / oscuro**.
+   La información nunca depende solo del color: cada resaltado lleva también texto.
 
 ## Estructura
 
@@ -52,8 +81,8 @@ src/
 | Fase | Contenido                                                             | Estado |
 | ---- | --------------------------------------------------------------------- | ------ |
 | F0   | Esqueleto, CI, Vercel                                                 | ✅     |
-| (a)  | Solver puro con fracciones + tests                                    | ⬜     |
-| (b)  | Tabla Símplex con stepper, explicaciones, panel matricial y entrada   | ⬜     |
+| (a)  | Solver puro con fracciones + tests                                    | ✅     |
+| (b)  | Tabla Símplex con stepper, explicaciones, panel matricial y entrada   | ✅     |
 | (c)  | Gráfico 2D de región factible y trayectoria                           | ⬜     |
 | (d)  | Gráficos de evolución (z, básicas, costes reducidos, holguras, 3D)    | ⬜     |
 | (e)  | Símplex Dual, modo automático y problema dual                         | ⬜     |

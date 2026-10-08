@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { RegionFactible2D } from './components/charts/RegionFactible2D'
 import { PanelEntrada } from './components/input/PanelEntrada'
 import { VistaProblema } from './components/input/VistaProblema'
 import { ThemeToggle } from './components/layout/ThemeToggle'
@@ -101,12 +102,22 @@ function App() {
               </div>
               <div className="flex flex-col gap-4">
                 <PanelExplicacion snapshot={snapshot} />
-                <section
-                  aria-label="Gráficos"
-                  className="rounded-lg border border-dashed border-slate-300 p-4 text-sm text-slate-500 dark:border-slate-700"
-                >
-                  Región factible 2D y gráficas de evolución: próximas fases (c) y (d).
-                </section>
+                {resultado.problem && resultado.problem.nombresVars.length === 2 ? (
+                  <RegionFactible2D
+                    problem={resultado.problem}
+                    snapshots={resultado.snapshots}
+                    k={snapshot.k}
+                  />
+                ) : (
+                  <section
+                    aria-label="Gráficos"
+                    className="rounded-lg border border-dashed border-slate-300 p-4 text-sm text-slate-500 dark:border-slate-700"
+                  >
+                    El gráfico de la región factible solo está disponible para problemas de 2
+                    variables introducidos como problema (no como matriz). Las gráficas de evolución
+                    llegarán en la fase (d).
+                  </section>
+                )}
               </div>
             </div>
           </>

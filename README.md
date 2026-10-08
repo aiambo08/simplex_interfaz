@@ -6,7 +6,7 @@ de Programación Lineal, pensada como herramienta de estudio para Investigación
 con explicaciones en lenguaje natural y gráficos de la región factible y de la evolución del
 algoritmo.
 
-> Estado: **fase (c) — gráfico 2D de la región factible y trayectoria del Símplex**.
+> Estado: **fase (d) — gráficas de evolución por iteración y vista 3D del poliedro**.
 > Las funcionalidades se añaden por fases (ver abajo).
 
 ## Stack
@@ -69,7 +69,18 @@ Scripts disponibles:
    vértice actual, su z y la equivalencia «variables no básicas = 0 ⇔ restricciones activas». Opcional:
    mostrar las intersecciones no factibles. En el Símplex Dual los puntos fuera de la región se dibujan
    en rojo; en problemas no acotados se dibuja la dirección de crecimiento infinito de z.
-6. Arriba a la derecha puedes alternar **fracción exacta / decimal** y **modo claro / oscuro**.
+6. **Gráficas de evolución** (cualquier dimensión, bajo la región factible): evolución de z por
+   iteración (línea; cada punto es un botón «Ir a la iteración k»), valores de las variables básicas por
+   iteración (barras agrupadas, la iteración actual resaltada), costes reducidos del renglón z en la
+   iteración actual (barras; la variable que entra en rojo con «↑ entra») y holguras por restricción
+   (recurso usado frente a disponible/requerido, con la holgura `s_i`/`e_i` y si la restricción está
+   activa o violada). Con matriz importada no hay problema original, así que región y holguras se
+   sustituyen por un aviso.
+7. **Vista 3D** (problemas de 3 variables): poliedro factible exacto (vértices por intersección de tres
+   planos, aristas y caras coloreadas por restricción) con la trayectoria numerada y el punto actual;
+   deslizadores de giro y elevación. Si el poliedro no está acotado se recorta y las aristas del recorte
+   van discontinuas.
+8. Arriba a la derecha puedes alternar **fracción exacta / decimal** y **modo claro / oscuro**.
    La información nunca depende solo del color: cada resaltado lleva también texto.
 
 ## Estructura
@@ -77,7 +88,7 @@ Scripts disponibles:
 ```
 src/
   solver/       # TS puro: parseo, forma estándar, Símplex primal y dual, snapshots
-  geometry/     # TS puro: rectas, vértices, polígono factible y trayectoria 2D (fracciones exactas)
+  geometry/     # TS puro: región 2D (rectas, vértices, polígono) y poliedro 3D (planos, vértices, aristas, caras)
   components/   # UI: entrada, tabla Símplex, gráficos, layout
   state/        # sesión (snapshots + iteración actual + método)
   examples/     # problemas precargados
@@ -92,7 +103,7 @@ src/
 | (a)  | Solver puro con fracciones + tests                                    | ✅     |
 | (b)  | Tabla Símplex con stepper, explicaciones, panel matricial y entrada   | ✅     |
 | (c)  | Gráfico 2D de región factible y trayectoria                           | ✅     |
-| (d)  | Gráficos de evolución (z, básicas, costes reducidos, holguras, 3D)    | ⬜     |
+| (d)  | Gráficos de evolución (z, básicas, costes reducidos, holguras, 3D)    | ✅     |
 | (e)  | Símplex Dual, modo automático y problema dual                         | ⬜     |
 | (f)  | Casos especiales (óptimo, no acotado, infactible, degeneración, alt.) | ⬜     |
 | (g)  | Extras (sensibilidad, quiz, exportación, Gran M)                      | ⬜     |

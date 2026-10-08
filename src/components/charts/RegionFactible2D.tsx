@@ -72,6 +72,17 @@ function segmentoEnCaja(a: P, b: number, xMax: number, yMax: number): [P, P] | n
   ]
 }
 
+/** Extremo del rayo p + t·d (t > 0) al salir del rectángulo [0,xMax]×[0,yMax]; conserva la dirección exacta. */
+function rayoEnCaja(p: P, d: P, xMax: number, yMax: number): P | null {
+  let t = Infinity
+  if (d[0] > 1e-12) t = Math.min(t, (xMax - p[0]) / d[0])
+  if (d[0] < -1e-12) t = Math.min(t, -p[0] / d[0])
+  if (d[1] > 1e-12) t = Math.min(t, (yMax - p[1]) / d[1])
+  if (d[1] < -1e-12) t = Math.min(t, -p[1] / d[1])
+  if (!Number.isFinite(t) || t <= 1e-9) return null
+  return [p[0] + t * d[0], p[1] + t * d[1]]
+}
+
 function pasoTicks(max: number): number {
   const bruto = max / 6
   const pot = 10 ** Math.floor(Math.log10(bruto))
@@ -117,6 +128,7 @@ export function RegionFactible2D({ problem, snapshots, k }: Props) {
   ]
   const escalaZ = Math.max(1, Math.abs(c[0]) * xMax + Math.abs(c[1]) * yMax)
   const dirNoAcotada = s.estado === 'no_acotado' ? direccionNoAcotada(s) : null
+  const finNoAcotada = dirNoAcotada ? rayoEnCaja(pActual, num(dirNoAcotada), xMax, yMax) : null
   const activas = restriccionesActivas(problem, s)
   const ticksX = Array.from(
     { length: Math.floor(xMax / pasoTicks(xMax)) + 1 },
@@ -140,6 +152,10 @@ export function RegionFactible2D({ problem, snapshots, k }: Props) {
       <svg
         viewBox={`0 0 ${W} ${H}`}
         role="img"
+        data-ancho-plot={anchoPlot}
+        data-alto-plot={altoPlot}
+        data-xmax={xMax}
+        data-ymax={yMax}
         aria-label={`Región factible en el plano ${n1}-${n2}; iteración ${k} en el punto ${fmt(actual.x)}`}
         className="h-auto w-full max-w-[560px] select-none text-slate-700 dark:text-slate-300"
       >
@@ -374,13 +390,13 @@ export function RegionFactible2D({ problem, snapshots, k }: Props) {
           strokeWidth={2}
           markerEnd="url(#flecha-grad)"
         />
-        {dirNoAcotada && (
+        {finNoAcotada && (
           <line
             data-testid="direccion-no-acotada"
             x1={sx(pActual[0])}
             y1={sy(pActual[1])}
-            x2={sx(Math.min(xMax, pActual[0] + toNumber(dirNoAcotada[0]) * xMax))}
-            y2={sy(Math.min(yMax, pActual[1] + toNumber(dirNoAcotada[1]) * yMax))}
+            x2={sx(finNoAcotada[0])}
+            y2={sy(finNoAcotada[1])}
             stroke="#d97706"
             strokeWidth={3}
             strokeDasharray="8 4"

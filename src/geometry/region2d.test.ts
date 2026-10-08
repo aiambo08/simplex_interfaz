@@ -72,6 +72,7 @@ describe('geometria2D', () => {
     const ultimo = r.snapshots.at(-1)!
     expect(ultimo.estado).toBe('no_acotado')
     const d = direccionNoAcotada(ultimo)!
+    expect(d.map((c) => c.valueOf())).toEqual([1, 1])
     expect(d[0].compare(0) >= 0 && d[1].compare(0) >= 0).toBe(true)
     expect(d.some((c) => c.compare(0) > 0)).toBe(true)
     expect(direccionNoAcotada(r.snapshots[0]!)).toBeNull()

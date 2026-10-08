@@ -6,7 +6,7 @@ de Programación Lineal, pensada como herramienta de estudio para Investigación
 con explicaciones en lenguaje natural y gráficos de la región factible y de la evolución del
 algoritmo.
 
-> Estado: **fase (b) — tabla Símplex con stepper, explicaciones, panel matricial y modos de entrada**.
+> Estado: **fase (c) — gráfico 2D de la región factible y trayectoria del Símplex**.
 > Las funcionalidades se añaden por fases (ver abajo).
 
 ## Stack
@@ -62,7 +62,14 @@ Scripts disponibles:
    - **Operaciones aplicadas**: `F_p ← F_p / pivote` y `F_i ← F_i − a·F_p` con los factores exactos.
    - **Formulación matricial**: `B⁻¹`, `c_Bᵀ B⁻¹`, `x_B = B⁻¹ b`, valor de z y comprobación de que
      coinciden con las columnas de la base en la tabla.
-5. Arriba a la derecha puedes alternar **fracción exacta / decimal** y **modo claro / oscuro**.
+5. **Gráfico 2D** (problemas de 2 variables introducidos como problema): cada restricción como recta
+   con su semiplano sombreado, la región factible como polígono con sus vértices, el punto actual
+   (numerado por iteración) que se mueve con el stepper, la trayectoria recorrida con flechas, la recta
+   de nivel `c·x = z` (desplazable con un deslizador) y el vector gradiente. Debajo se indica el
+   vértice actual, su z y la equivalencia «variables no básicas = 0 ⇔ restricciones activas». Opcional:
+   mostrar las intersecciones no factibles. En el Símplex Dual los puntos fuera de la región se dibujan
+   en rojo; en problemas no acotados se dibuja la dirección de crecimiento infinito de z.
+6. Arriba a la derecha puedes alternar **fracción exacta / decimal** y **modo claro / oscuro**.
    La información nunca depende solo del color: cada resaltado lleva también texto.
 
 ## Estructura
@@ -70,6 +77,7 @@ Scripts disponibles:
 ```
 src/
   solver/       # TS puro: parseo, forma estándar, Símplex primal y dual, snapshots
+  geometry/     # TS puro: rectas, vértices, polígono factible y trayectoria 2D (fracciones exactas)
   components/   # UI: entrada, tabla Símplex, gráficos, layout
   state/        # sesión (snapshots + iteración actual + método)
   examples/     # problemas precargados
@@ -83,7 +91,7 @@ src/
 | F0   | Esqueleto, CI, Vercel                                                 | ✅     |
 | (a)  | Solver puro con fracciones + tests                                    | ✅     |
 | (b)  | Tabla Símplex con stepper, explicaciones, panel matricial y entrada   | ✅     |
-| (c)  | Gráfico 2D de región factible y trayectoria                           | ⬜     |
+| (c)  | Gráfico 2D de región factible y trayectoria                           | ✅     |
 | (d)  | Gráficos de evolución (z, básicas, costes reducidos, holguras, 3D)    | ⬜     |
 | (e)  | Símplex Dual, modo automático y problema dual                         | ⬜     |
 | (f)  | Casos especiales (óptimo, no acotado, infactible, degeneración, alt.) | ⬜     |

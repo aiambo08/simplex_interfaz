@@ -7,6 +7,17 @@ import { PanelGraficos } from './PanelGraficos'
 const ejemplo = (id: string) => parseProblem(EJEMPLOS.find((e) => e.id === id)!.input)
 
 describe('PanelGraficos', () => {
+  it('las etiquetas de valor no se salen del gráfico ni pisan los nombres de las variables', () => {
+    const r = runAll(ejemplo('mezcla-3v'))
+    render(<PanelGraficos resultado={r} k={1} irA={() => undefined} />)
+    for (const t of screen.getAllByTestId('etiqueta-z'))
+      expect(Number(t.getAttribute('y'))).toBeGreaterThanOrEqual(12)
+    const costes = screen.getByRole('img', { name: /Costes reducidos/ })
+    const altoCostes = Number(costes.getAttribute('viewBox')!.split(' ')[3])
+    for (const t of screen.getAllByTestId('valor-coste'))
+      expect(Number(t.getAttribute('y'))).toBeLessThan(altoCostes - 40)
+  })
+
   it('muestra evolución de z, básicas, costes reducidos y holguras sincronizados con k', () => {
     const r = runAll(ejemplo('produccion-2v'))
     const irA = vi.fn()

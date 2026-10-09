@@ -10,7 +10,7 @@ interface Props {
 
 const W = 420
 const H = 220
-const M = { izq: 56, der: 16, sup: 16, inf: 32 }
+const M = { izq: 56, der: 16, sup: 28, inf: 32 }
 
 export function EvolucionZ({ snapshots, k, irA }: Props) {
   const { modo } = useFormato()
@@ -89,6 +89,7 @@ export function EvolucionZ({ snapshots, k, irA }: Props) {
               {i}
             </text>
             <text
+              data-testid="etiqueta-z"
               x={sx(i)}
               y={sy(zs[i]!) - 10}
               textAnchor="middle"

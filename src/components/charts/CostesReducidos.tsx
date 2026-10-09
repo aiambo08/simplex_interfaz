@@ -103,7 +103,8 @@ export function CostesReducidos({ snapshot: s }: Props) {
               )}
               <text
                 x={x + anchoGrupo * 0.3}
-                y={v >= 0 ? y1 - 4 : y2 + 12}
+                data-testid="valor-coste"
+                y={y1 - 4}
                 textAnchor="middle"
                 fontSize={10}
                 fill="currentColor"

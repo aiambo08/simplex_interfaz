@@ -6,6 +6,8 @@ de Programación Lineal, pensada como herramienta de estudio para Investigación
 con explicaciones en lenguaje natural y gráficos de la región factible y de la evolución del
 algoritmo.
 
+**Demo en vivo:** https://simplex-interfaz.vercel.app
+
 > Estado: **fase (d) — gráficas de evolución por iteración y vista 3D del poliedro**.
 > Las funcionalidades se añaden por fases (ver abajo).
 
@@ -110,8 +112,15 @@ src/
 
 ## Despliegue en Vercel
 
-El proyecto es un build estático: importa el repositorio en Vercel, detecta Vite automáticamente
-y usa `vercel.json` (build `npm run build`, salida `dist/`).
+Producción: **https://simplex-interfaz.vercel.app** (se redespliega automáticamente con cada
+merge a `main`; cada PR recibe además su propia URL de preview, enlazada en el PR por el bot de
+Vercel).
+
+El proyecto es un build estático: Vercel detecta Vite y usa `vercel.json` (build `npm run build`,
+salida `dist/`, todas las rutas reescritas a `index.html`). Para reproducirlo en otra cuenta:
+
+1. https://vercel.com/new → **Import** `aiambo08/simplex_interfaz`.
+2. No cambiar nada (Framework Preset: Vite, sin variables de entorno) → **Deploy**.
 
 ## Licencia
 

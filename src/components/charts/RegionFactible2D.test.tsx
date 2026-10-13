@@ -23,6 +23,29 @@ describe('RegionFactible2D', () => {
     expect(etiquetas.some((t) => t.getAttribute('text-anchor') === 'end')).toBe(true)
   })
 
+  it('la flecha del gradiente apunta en la dirección de c aunque los ejes tengan escalas distintas', () => {
+    const r = runAll(ejemplo('degenerado'))
+    const k = r.snapshots.length - 1
+    render(<RegionFactible2D problem={r.problem!} snapshots={r.snapshots} k={k} />)
+    const svg = screen.getByRole('img')
+    const [ancho, alto, xMax, yMax] = ['ancho-plot', 'alto-plot', 'xmax', 'ymax'].map((a) =>
+      Number(svg.getAttribute(`data-${a}`)),
+    ) as [number, number, number, number]
+    expect(xMax).not.toBe(yMax)
+    const g = screen.getByTestId('gradiente')
+    const [x1, y1, x2, y2] = ['x1', 'y1', 'x2', 'y2'].map((a) => Number(g.getAttribute(a))) as [
+      number,
+      number,
+      number,
+      number,
+    ]
+    const dx = ((x2 - x1) * xMax) / ancho
+    const dy = ((y1 - y2) * yMax) / alto
+    expect(dy / dx).toBeCloseTo(3, 6)
+    expect(dx).toBeGreaterThan(0)
+    expect(screen.getByText(/escalas distintas/)).toBeInTheDocument()
+  })
+
   it('dibuja región, restricciones, vértices, trayectoria, recta de nivel y gradiente', () => {
     const p = ejemplo('produccion-2v')
     const { snapshots } = runAll(p)

@@ -120,11 +120,12 @@ export function RegionFactible2D({ problem, snapshots, k }: Props) {
   const zNivel = toNumber(actual.z) + desplazamiento
   const nivel = segmentoEnCaja(c, zNivel, xMax, yMax)
   const grad = num(geo.gradiente)
-  const normaGrad = Math.hypot(grad[0], grad[1]) || 1
+  const gradPx: P = [(grad[0] * anchoPlot) / xMax, (grad[1] * altoPlot) / yMax]
+  const normaGrad = Math.hypot(gradPx[0], gradPx[1]) || 1
   const longFlecha = 60
   const gradFin: P = [
-    sx(pActual[0]) + (grad[0] / normaGrad) * longFlecha,
-    sy(pActual[1]) - (grad[1] / normaGrad) * longFlecha,
+    sx(pActual[0]) + (gradPx[0] / normaGrad) * longFlecha,
+    sy(pActual[1]) - (gradPx[1] / normaGrad) * longFlecha,
   ]
   const escalaZ = Math.max(1, Math.abs(c[0]) * xMax + Math.abs(c[1]) * yMax)
   const dirNoAcotada = s.estado === 'no_acotado' ? direccionNoAcotada(s) : null
@@ -472,6 +473,12 @@ export function RegionFactible2D({ problem, snapshots, k }: Props) {
         <span>
           → rojo: gradiente ({problem.sentido === 'max' ? 'c' : '−c'}, dirección de mejora)
         </span>
+        {xMax !== yMax && (
+          <span>
+            Los ejes tienen escalas distintas: el gradiente es perpendicular a la recta de nivel
+            aunque en pantalla no lo parezca.
+          </span>
+        )}
         {dirNoAcotada && <span>- - ámbar: dirección de crecimiento infinito de z</span>}
       </p>
     </section>
